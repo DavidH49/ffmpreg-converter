@@ -15,7 +15,9 @@ fn main() {
     let src_path = &args[1];
     let dst_path = parse_path(src_path);
 
-    let command_args = ["-hwaccel cuda", "-i", src_path, "-c:v h264_nvenc", &dst_path];
+    let command_args = ["-hwaccel","cuda", "-i", src_path, "-c:v", "h264_nvenc", &dst_path];
+
+    println!("ffmpeg {:?}", &command_args);
 
     let cmd = Command::new("ffmpeg")
         .args(command_args)
