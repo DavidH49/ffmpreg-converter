@@ -2,6 +2,7 @@ mod consts;
 
 use crate::consts::*;
 use std::{env, process, process::Command};
+use once_cell::sync::Lazy;
 use regex::Regex;
 
 
@@ -40,15 +41,14 @@ fn get_args() -> Result<Vec<String>, &'static str> {
 
 
 fn parse_path(path: &str) -> String {
+    static RE_FILEEXT: Lazy<Regex> = Lazy::new(|| Regex::new(REGEX_FILEEXT).unwrap());
+    static RE_FILEPATH: Lazy<Regex> = Lazy::new(|| Regex::new(REGEX_FILEPATH).unwrap());
+
     // Replace file extension
-    let dst_path = Regex::new(REGEX_FILEEXT)
-        .unwrap()
-        .replace(path, EXTENSION);
+    let dst_path = RE_FILEEXT.replace(&path, EXTENSION);
 
     // Replace file path
-    let dst_path = Regex::new(REGEX_FILEPATH)
-        .unwrap()
-        .replace(&dst_path, DST_PATH);
+    let dst_path = RE_FILEPATH.replace(&dst_path, DST_PATH);
 
     dst_path.to_string()
 }
